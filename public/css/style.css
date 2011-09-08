@@ -30,12 +30,11 @@ textarea, input[type=text] {
 #container {
   font-size: 2em;
   background-color: white;
-  margin: 0 auto;
-  margin-top: 3em;
   text-align: center;
 }
 
 
 canvas {
-  border: 5px solid #333;
+    border: solid black;
+    border-width: 0 0 5px 5px;
 }
