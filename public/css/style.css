@@ -30,6 +30,7 @@ textarea, input[type=text] {
 #container {
   font-size: 2em;
   background-color: white;
+  padding-top: 10px;
   text-align: center;
 }
 
