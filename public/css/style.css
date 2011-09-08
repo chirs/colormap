@@ -8,7 +8,6 @@ body, html, div { margin: 0; padding: 0}
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   color: #444;
-  background-color: #B6DEE3;
 }
 
 a { color: #333; }
@@ -29,42 +28,14 @@ textarea, input[type=text] {
 }
 
 #container {
-  padding-top: 2em;
-  border: 3px solid black;
-  width: 50%;
   font-size: 2em;
-  height: 10em;
   background-color: white;
   margin: 0 auto;
-  text-align: center;
   margin-top: 3em;
+  text-align: center;
 }
 
-#haiku {
-    height: 4em;
-}
 
-#haiku #body {
-  padding: 5px 0;
-}
-
-#haiku #date {
-  color: #aaa;
-  font-size: .8em;
-}
-
-#nav {
-  font-size: .8em;  
-}
-
-#nav a {
-  margin-right: 1em;
-}
-
-#nav a.last {
-  margin-right: 0;
-}
-
-#nav a:hover {
-  border-bottom: 5px solid #333;
+canvas {
+  border: 5px solid #333;
 }

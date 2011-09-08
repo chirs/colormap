@@ -2,7 +2,7 @@ express = require 'express'
 path = require 'path'
 models = require './model'
 
-baseDir = path.normalize "#{__dirname}/.."
+baseDir = path.normalize "#{__dirname}/../.."
 
 app = module.exports = express.createServer()
 
