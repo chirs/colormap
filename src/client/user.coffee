@@ -112,60 +112,57 @@ $(->
   sequentialHeight = hc.nextHeight
   randomHeight = () -> Math.floor(Math.random() * HEIGHT)
 
-  getDiff = (spans) ->
-    l = spans.length
-    seconds = spans[l-1][0] - spans[0][0]
-    seconds
+  makeGraphic = (spans) ->
+    canvas = $("canvas")[0]
+    ctx = canvas.getContext('2d')
+    ctx.font = "bold 12px sans-serif"
 
-  secondsFromStart = (date, spans) ->
-    date - spans[0][0]
+    obj =
 
-  # looks like we need to create an init function or something...
+      firstSpan: -> spans[0]
+      lastSpan: -> spans[spans.length - 1]
+      getDate: (span) -> span[0]
 
-  pixelsFromStart = (date, spans) ->
-    decimal = secondsFromStart(date, spans) / getDiff(spans)
-    Math.round(decimal * WIDTH)
+      getDiff: -> this.getDate(this.lastSpan()) - this.getDate(this.firstSpan()) # name better.
 
-  getPoint = (date, spans) ->
-    return [pixelsFromStart(date, spans), sequentialHeight()]
+      secondsFromStart: (date) -> date - this.getDate(this.firstSpan())
 
+      pixelsFromStart: (date) ->
+        decimal = this.secondsFromStart(date) / this.getDiff(spans)
+        Math.round(decimal * WIDTH)
 
-  canvas = $("canvas")[0]
-  ctx = canvas.getContext('2d')
-  ctx.font = "bold 12px sans-serif"
+      getPoint: (date) -> [this.pixelsFromStart(date), sequentialHeight()]
 
-  drawBox = (center, hex, text) ->
-    [x, y] = center
-    ctx.fillStyle = hex
-    DISTANCE = 5
-    ctx.fillRect(x-DISTANCE, y-DISTANCE, DISTANCE * 2, DISTANCE * 2)
-    ctx.fillText(text, x + DISTANCE * 2, y)
+      drawBox: (center, hex, text) ->
+        [x, y] = center
+        ctx.fillStyle = hex
+        DISTANCE = 5
+        ctx.fillRect(x-DISTANCE, y-DISTANCE, DISTANCE * 2, DISTANCE * 2)
+        ctx.fillText(text, x + DISTANCE * 2, y)
 
-  drawRectangle = (start, hex) ->
-    ctx.fillStyle = hex
-    ctx.fillRect(start,0,WIDTH, HEIGHT)
+      drawRectangle: (start, hex) ->
+        ctx.fillStyle = hex
+        ctx.fillRect(start,0,WIDTH, HEIGHT)
 
-  drawCanvas = (spans, events) ->
-    # Spans is passed around everywhere because we have to know the
-    # start and end dates of the map.
-    # would be better to initialize an object with the span immutable
+      drawCanvas: (events) ->
+        for tuple in spans
+          [date, hex] = tuple
+          pixelStart = this.pixelsFromStart(date)
+          this.drawRectangle(pixelStart, hex)
 
-    for tuple in spans
-      [date, hex] = tuple
-      pixelStart = pixelsFromStart(date, spans)
-      drawRectangle(pixelStart, hex)
+        for tuple in events
+          [date, text] = tuple
+          point = this.getPoint(date)
+          this.drawBox(point, "#000000", text)
 
-    for tuple in events
-      [date, text] = tuple
-      point = getPoint(date, spans)
-      drawBox(point, "#000000", text)
+  tg = makeGraphic(spanMap.terror)
+  tg.drawCanvas(eventMap.wars)
 
-
-  drawCanvas(spanMap.terror, eventMap.wars)
+  #drawCanvas(spanMap.terror, eventMap.wars)
 
   $("li").click( ->
     eventName = $(this).html()
-    drawCanvas(spanMap.terror, eventMap[eventName])
+    #drawCanvas(spanMap.terror, eventMap[eventName])
 
   )
 
