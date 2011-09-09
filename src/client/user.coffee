@@ -48,7 +48,6 @@ $(->
       ]
 
 
-
   # Terror levels.
   spanMap =
     terror: [
@@ -144,19 +143,22 @@ $(->
         ctx.fillStyle = hex
         ctx.fillRect(start,0,WIDTH, HEIGHT)
 
-      drawCanvas: (events) ->
+      drawCanvas: () ->
         for tuple in spans
           [date, hex] = tuple
           pixelStart = this.pixelsFromStart(date)
           this.drawRectangle(pixelStart, hex)
 
+      drawEvents: (events) ->
         for tuple in events
           [date, text] = tuple
           point = this.getPoint(date)
           this.drawBox(point, "#000000", text)
 
   tg = makeGraphic(spanMap.terror)
-  tg.drawCanvas(eventMap.wars)
+  tg.drawCanvas()
+  tg.drawEvents(eventMap.wars)
+  tg.drawEvents(eventMap.terror)
 
   #drawCanvas(spanMap.terror, eventMap.wars)
 
