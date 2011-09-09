@@ -92,6 +92,7 @@ $(->
 
 
 
+  # Should be possible to set spans if we want...
   makeGraphic = (height, width, spans) ->
 
     canvas = $("canvas")[0]
@@ -142,7 +143,7 @@ $(->
         ctx.fillStyle = hex
         ctx.fillRect(start, 0, width, height)
 
-      drawCanvas: () ->
+      drawSpans: ->
         for tuple in spans
           [date, hex] = tuple
           pixelStart = this.pixelsFromStart(date)
@@ -154,19 +155,37 @@ $(->
           point = this.getPoint(date)
           this.drawBox(point, "#000000", text)
 
-  tg = makeGraphic(650, 1250, spanMap.terror)
-  tg.drawCanvas()
-  tg.drawEvents(eventMap.wars)
-  tg.drawEvents(eventMap.terror)
+      reset: ->
+        canvas.width = width
 
-  #drawCanvas(spanMap.terror, eventMap.wars)
+
+  getCanvas = (height, width, spans) ->
+    tg = makeGraphic(height, width, spanMap.terror)
+    tg.drawSpans()
+    tg
+
+  tg = getCanvas(650, 1250, spanMap.terror)
+
+  drawSelectedEvents = ->
+    tg.reset()
+    tg.drawSpans()
+    $("li.selected").each( ->
+      eventsName = $(this).html()
+      events = eventMap[eventsName]
+      tg.drawEvents(events)
+    )
 
   $("li").click( ->
-    eventName = $(this).html()
-    #drawCanvas(spanMap.terror, eventMap[eventName])
-
+    $(this).toggleClass("selected")
+    drawSelectedEvents()
   )
 
+  $("a#reset").click( ->
+    alert('hello')
+    tg.reset()
+  )
 
+  $("li.terror").click()
+  drawSelectedEvents()
 
 )

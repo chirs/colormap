@@ -12,6 +12,8 @@ body {
 
 a { color: #333; }
 
+li.selected { background-color: red; }
+
 textarea {
   width: 70%;
   height: 7em;
