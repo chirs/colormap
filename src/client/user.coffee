@@ -1,7 +1,4 @@
 $(->
-  HEIGHT = 650
-  WIDTH = 1250
-
   WHITE = "#FFFFFF"
   RED = "#E01B4C"
   ORANGE = "#F59433"
@@ -94,27 +91,29 @@ $(->
     ]
 
 
-  heightCounter = () ->
-    y = 50
 
-    obj =
-      nextHeight: () ->
-        if y > HEIGHT
-          y = 50
-        n = y
-        y += 40
+  makeGraphic = (height, width, spans) ->
 
-    obj
-
-  # Make height steadily decline.
-  hc = heightCounter()
-  sequentialHeight = hc.nextHeight
-  randomHeight = () -> Math.floor(Math.random() * HEIGHT)
-
-  makeGraphic = (spans) ->
     canvas = $("canvas")[0]
     ctx = canvas.getContext('2d')
     ctx.font = "bold 12px sans-serif"
+
+    heightCounter = () ->
+      y = 50
+
+      obj =
+        nextHeight: () ->
+          if y > height
+            y = 50
+          n = y
+          y += 40
+
+      obj
+
+    # Make height steadily decline.
+    hc = heightCounter()
+    sequentialHeight = hc.nextHeight
+    randomHeight = () -> Math.floor(Math.random() * height)
 
     obj =
 
@@ -128,7 +127,7 @@ $(->
 
       pixelsFromStart: (date) ->
         decimal = this.secondsFromStart(date) / this.getDiff(spans)
-        Math.round(decimal * WIDTH)
+        Math.round(decimal * width)
 
       getPoint: (date) -> [this.pixelsFromStart(date), sequentialHeight()]
 
@@ -141,7 +140,7 @@ $(->
 
       drawRectangle: (start, hex) ->
         ctx.fillStyle = hex
-        ctx.fillRect(start,0,WIDTH, HEIGHT)
+        ctx.fillRect(start, 0, width, height)
 
       drawCanvas: () ->
         for tuple in spans
@@ -155,7 +154,7 @@ $(->
           point = this.getPoint(date)
           this.drawBox(point, "#000000", text)
 
-  tg = makeGraphic(spanMap.terror)
+  tg = makeGraphic(650, 1250, spanMap.terror)
   tg.drawCanvas()
   tg.drawEvents(eventMap.wars)
   tg.drawEvents(eventMap.terror)
